@@ -45,6 +45,9 @@ jobs:
         run: npm test
 
   if_merged:
+    needs:
+          # List all required job names here.
+          - build
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
