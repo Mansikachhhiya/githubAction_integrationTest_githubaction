@@ -10,7 +10,9 @@ on:
       - master
     types:
       - opened
-
+  push:
+    branches:
+      - feature/create-api
 
 jobs:
   build:
