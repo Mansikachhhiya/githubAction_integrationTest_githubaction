@@ -7,12 +7,12 @@ on:
   # Trigger on pull request against master branch
   pull_request_target:
     branches:
-      - master
+      - develop
     types:
       - opened
-  push:
-    branches:
-      - feature/create-api
+#  push:
+#    branches:
+#      - feature/create-api
 
 jobs:
   build:
