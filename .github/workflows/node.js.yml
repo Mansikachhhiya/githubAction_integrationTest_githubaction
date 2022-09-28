@@ -16,7 +16,34 @@ on:
   push:
     branches:
       - develop
+
 jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # This adds support for both `pull_request_target` and `push` events.
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - name: install dependencies
+        run: npm install
+      - name: docker up for run postgres
+        run: docker-compose up -d
+      - name: run unit test
+        run: npm test
+
   if_merged:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
@@ -24,33 +51,6 @@ jobs:
       - run: |
           echo The PR was merged
 
-#jobs:
-#  build:
-#
-#    runs-on: ubuntu-latest
-#
-#    strategy:
-#      matrix:
-#        node-version: [14.x]
-#        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-#
-#    steps:
-#      - uses: actions/checkout@v3
-#        with:
-#          # This adds support for both `pull_request_target` and `push` events.
-#          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-#      - name: Use Node.js ${{ matrix.node-version }}
-#        uses: actions/setup-node@v3
-#        with:
-#          node-version: ${{ matrix.node-version }}
-#          cache: 'npm'
-#      - name: install dependencies
-#        run: npm install
-#      - name: docker up for run postgres
-#        run: docker-compose up -d
-#      - name: run unit test
-#        run: npm test
-#
 #  merge-me:
 #    name: merge me!
 #    needs:
