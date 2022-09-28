@@ -10,7 +10,10 @@ on:
       - develop
     types:
       - opened
-#  push:
+  pull_request:
+    branches:
+      - develop
+  #  push:
 #    branches:
 #      - feature/create-api
 
